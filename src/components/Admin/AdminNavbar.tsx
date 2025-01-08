@@ -35,7 +35,6 @@ const AdminNavbar: React.FC = () => {
           bgcolor: "#fff",
           height: 50,
           borderBottom: "1px solid  #3516c0",
-          zIndex: 1,
         }}
       >
         <Toolbar>
@@ -76,7 +75,6 @@ const AdminNavbar: React.FC = () => {
                   height: 30,
                   bgcolor: "#3516c0",
                   mb: 1.5,
-                  mr: 5,
                 }}
               />
             </IconButton>
@@ -96,8 +94,8 @@ const AdminNavbar: React.FC = () => {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>
-              <LogoutIcon sx={{ mr: 1 }} /> Chiqish
+            <MenuItem onClick={handleClose} sx={{color:"#3516c0"}}>
+              <LogoutIcon sx={{ mr: 1, color: "#3516c0" }} /> Chiqish
             </MenuItem>
           </Menu>
         </Toolbar>

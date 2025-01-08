@@ -17,17 +17,17 @@ import {
 
 const statsData = {
   attendance: [
-    { month: "Yan", members: 80 },
-    { month: "Fev", members: 95 },
-    { month: "Mar", members: 90 },
-    { month: "Apr", members: 110 },
+    { month: "Yanvar", members: 80 },
+    { month: "Fevral", members: 95 },
+    { month: "Mart", members: 90 },
+    { month: "April", members: 110 },
     { month: "May", members: 100 },
   ],
   revenue: [
-    { month: "Yan", revenue: 4000 },
-    { month: "Fev", revenue: 4500 },
-    { month: "Mar", revenue: 5000 },
-    { month: "Apr", revenue: 7000 },
+    { month: "Yanvar", revenue: 4000 },
+    { month: "Fevral", revenue: 4500 },
+    { month: "Mart", revenue: 5000 },
+    { month: "April", revenue: 7000 },
     { month: "May", revenue: 7500 },
   ],
   membershipTypes: [
@@ -36,7 +36,7 @@ const statsData = {
     { type: "Premium", value: 30 },
   ],
   equipmentUpdates: [
-    { type: "Yangi trenajerlar", value: 25 },
+    { type: "Yangi trenajorlar", value: 25 },
     { type: "Yangi gilamlar", value: 15 },
     { type: "Og'irliklar", value: 10 },
     { type: "Dastgohlar", value: 5 },
@@ -50,8 +50,7 @@ const GymStats = () => {
     <Box
       sx={{
         padding: 3,
-   
-  
+
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -72,13 +71,19 @@ const GymStats = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           gap: 4,
           width: "100%",
           maxWidth: 800,
         }}
       >
-    
-        <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 3,
+            borderRadius: 2,
+          }}
+        >
           <Typography
             variant="h6"
             align="center"
@@ -112,7 +117,6 @@ const GymStats = () => {
           </LineChart>
         </Paper>
 
-        {/* A'zolik Turlari */}
         <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
           <Typography
             variant="h6"
@@ -124,7 +128,7 @@ const GymStats = () => {
             A'zolik Turlari
           </Typography>
           <Typography variant="body1" align="center" color="#000000" mb={2}>
-            Bu diagramma gymda mavjud bo'lgan a'zolik turlarini va ularning
+            Bu diagramma zalda mavjud bo'lgan a'zolik turlarini va ularning
             foizlarini ko'rsatadi.
           </Typography>
           <PieChart width={400} height={300}>
@@ -150,7 +154,6 @@ const GymStats = () => {
           </PieChart>
         </Paper>
 
-        {/* Oylik Daromad */}
         <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
           <Typography
             variant="h6"
@@ -162,7 +165,7 @@ const GymStats = () => {
             Oylik Daromad
           </Typography>
           <Typography variant="body1" align="center" color="#000000" mb={2}>
-            Bu diagramma gymning har oyda olingan daromadlarini ko'rsatadi.
+            Bu diagramma zalning har oyda olingan daromadlarini ko'rsatadi.
           </Typography>
           <BarChart
             width={400}
@@ -178,7 +181,6 @@ const GymStats = () => {
           </BarChart>
         </Paper>
 
-        {/* Sport Anjomlari */}
         <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
           <Typography
             variant="h6"
@@ -190,7 +192,7 @@ const GymStats = () => {
             Sport Anjomlari
           </Typography>
           <Typography variant="body1" align="center" color="#000000" mb={2}>
-            Bu diagramma gymga kiritilgan yangi sport anjomlarini ko'rsatadi.
+            Bu diagramma zalga kiritilgan yangi sport anjomlarini ko'rsatadi.
           </Typography>
           <BarChart
             width={400}

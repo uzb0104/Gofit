@@ -17,10 +17,9 @@ const Home: React.FC = () => {
           GoFit platformasiga xush kelibsiz !!
         </Typography>
         <Typography variant="body1" sx={{ color: "#555", fontSize: "16px" }}>
-          Fitnes markazlari va salomatlikni yaxshilashga yo'naltirilgan
-          platforma.
+          Fitnes markazlariga menejerlik uchun yo'naltirilgan platforma.
         </Typography>
-      </Box>    
+      </Box>
 
       <Box sx={{ marginBottom: "40px" }}>
         <Typography
