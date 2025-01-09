@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Admin/Sidebar";
-import AdminNavbar from "./components/Admin/AdminNavbar";
-import AdminProfile from "./components/Admin/ProfileAdmin";
-import Members from "./components/Admin/Members";
+import Sidebar from "./components/Sidebar/Sidebar";
+import AdminNavbar from "./components/Navbar/AdminNavbar";
+import AdminProfile from "./components/Profile/ProfileAdmin";
+import Members from "./components/MembersTable/Members";
 
-import PaymentManagment from "./components/Admin/Payment";
-import Services from "./components/Admin/Services";
-import UserList from "./components/Admin/Products";
-import GymStats from "./components/Admin/GymStats";
+import PaymentManagment from "./components/PaymentSection/Payment";
+import Services from "./components/Expenses/Services";
+import UserList from "./components/Products/Products";
+import GymStats from "./components/Statistics/GymStats";
 import { Box } from "@mui/material";
-import Home from "./components/Admin/Home";
+import Home from "./components/Sidebarhome/Home";
 
 const App: React.FC = () => {
   return (
@@ -33,7 +33,7 @@ const App: React.FC = () => {
                 overflowY: "auto",
                 padding: 2,
                 height: "calc(100vh - 50px)",
-                border: "1px solid "
+                border: "1px solid ",
               }}
             >
               <Routes>

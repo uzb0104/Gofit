@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ExpenseTable from "../Admin/ServiceForm";
+import ExpenseTable from "./ServiceForm";
 import { Expense } from "../../types/types/Expense";
 import {
   TextField,

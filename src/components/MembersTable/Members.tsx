@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MemberTable from "../Admin/MemberTable";
+import MemberTable from "./MemberTable";
 import { Member } from "../../types/types/Member";
 import {
   TextField,

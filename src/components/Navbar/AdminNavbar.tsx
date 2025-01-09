@@ -13,7 +13,6 @@ import {
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import SportsMartialArtsIcon from "@mui/icons-material/SportsMartialArts";
-import Sidebar from "./Sidebar";
 
 const AdminNavbar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -94,7 +93,7 @@ const AdminNavbar: React.FC = () => {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose} sx={{color:"#3516c0"}}>
+            <MenuItem onClick={handleClose} sx={{ color: "#3516c0" }}>
               <LogoutIcon sx={{ mr: 1, color: "#3516c0" }} /> Chiqish
             </MenuItem>
           </Menu>
