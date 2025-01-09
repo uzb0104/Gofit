@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stack,
   Table,
@@ -24,12 +24,22 @@ import {
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddIcon from "@mui/icons-material/Add";
+import { supabase } from "../../types/types/supabase";
+
+interface Products {
+  name: string;
+  category: string;
+  price: string;
+  date: number;
+  stock: string;
+}
 
 const ProductList = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false); // State for the delete confirmation modal
+  const [getData, setData] = useState<Products[]>([]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
@@ -37,6 +47,21 @@ const ProductList = () => {
     stock: 0,
     expiryDate: "",
   });
+
+  const fetchData = async () => {
+    const { data, error } = await supabase.from("Products").select("*");
+
+    if (error) {
+      console.error("Error fetching data:", error);
+      return;
+    }
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -101,7 +126,7 @@ const ProductList = () => {
 
   const handleDeleteProduct = (id: number) => {
     setProducts(products.filter((product) => product.id !== id));
-    setDeleteModalOpen(false); 
+    setDeleteModalOpen(false);
   };
 
   const handleEditProduct = (id: number) => {
@@ -118,7 +143,7 @@ const ProductList = () => {
     }
   };
 
-  const handleOpenDeleteModal = () => setDeleteModalOpen(true); 
+  const handleOpenDeleteModal = () => setDeleteModalOpen(true);
 
   return (
     <Container>
