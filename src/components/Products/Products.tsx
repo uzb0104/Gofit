@@ -27,11 +27,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { supabase } from "../../types/types/supabase";
 
 interface Products {
+  id: number;
   name: string;
   category: string;
   price: string;
   date: number;
-  stock: string;
+  stock: number;
 }
 
 const ProductList = () => {
@@ -44,8 +45,8 @@ const ProductList = () => {
     name: "",
     category: "",
     price: "",
-    stock: 0,
-    expiryDate: "",
+    stock: "",
+    date: "",
   });
 
   const fetchData = async () => {
@@ -61,41 +62,6 @@ const ProductList = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Whey Protein",
-      category: "Protein",
-      price: "200,000 UZS",
-      stock: 50,
-      expiryDate: "2025-05-01",
-    },
-    {
-      id: 2,
-      name: "BCAA",
-      category: "Amino Acids",
-      price: "120,000 UZS",
-      stock: 100,
-      expiryDate: "2024-11-20",
-    },
-    {
-      id: 3,
-      name: "Creatine",
-      category: "Supplement",
-      price: "150,000 UZS",
-      stock: 30,
-      expiryDate: "2025-02-14",
-    },
-    {
-      id: 4,
-      name: "Pre-Workout",
-      category: "Energy Booster",
-      price: "180,000 UZS",
-      stock: 70,
-      expiryDate: "2024-10-05",
-    },
-  ]);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, id: number) => {
     setAnchorEl(event.currentTarget);
@@ -114,33 +80,40 @@ const ProductList = () => {
       name: "",
       category: "",
       price: "",
-      stock: 0,
-      expiryDate: "",
+      stock: "",
+      date: "",
     });
   };
 
-  const handleAddProduct = () => {
-    setProducts([...products, { id: products.length + 1, ...newProduct }]);
+  const handleAddProduct = async () => {
+    const { data, error } = await supabase.from("Products").insert({
+      ...newProduct,
+    });
+
+    if (error) {
+      console.error("Error fetching data:", error);
+      return;
+    }
+    fetchData();
     handleDialogClose();
   };
 
   const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter((product) => product.id !== id));
     setDeleteModalOpen(false);
   };
 
   const handleEditProduct = (id: number) => {
-    const productToEdit = products.find((product) => product.id === id);
-    if (productToEdit) {
-      setNewProduct({
-        name: productToEdit.name,
-        category: productToEdit.category,
-        price: productToEdit.price,
-        stock: productToEdit.stock,
-        expiryDate: productToEdit.expiryDate,
-      });
-      setDialogOpen(true);
-    }
+    // const productToEdit = products.find((product) => product.id === id);
+    // if (productToEdit) {
+    //   setNewProduct({
+    //     name: productToEdit.name,
+    //     category: productToEdit.category,
+    //     price: productToEdit.price,
+    //     stock: productToEdit.stock,
+    //     data: productToEdit.data,
+    //   });
+    //   setDialogOpen(true);
+    // }
   };
 
   const handleOpenDeleteModal = () => setDeleteModalOpen(true);
@@ -196,7 +169,7 @@ const ProductList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products.map((product) => (
+              {getData.map((product) => (
                 <TableRow
                   key={product.id}
                   sx={{
@@ -208,7 +181,7 @@ const ProductList = () => {
                   <TableCell align="center">{product.name}</TableCell>
                   <TableCell align="center">{product.category}</TableCell>
                   <TableCell align="center">{product.price}</TableCell>
-                  <TableCell align="center">{product.expiryDate}</TableCell>
+                  <TableCell align="center">{product.date}</TableCell>
                   <TableCell align="center">{product.stock}</TableCell>
                   <TableCell align="center">
                     <IconButton
@@ -280,12 +253,19 @@ const ProductList = () => {
                 }
               />
               <TextField
-                label="To'langan"
+                label="Soni"
+                value={newProduct.stock}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, stock: e.target.value })
+                }
+              />
+              <TextField
+                label="Muddati"
                 type="date"
                 InputLabelProps={{ shrink: true }}
-                value={newProduct.expiryDate}
+                value={newProduct.date}
                 onChange={(e) =>
-                  setNewProduct({ ...newProduct, expiryDate: e.target.value })
+                  setNewProduct({ ...newProduct, date: e.target.value })
                 }
               />
             </Stack>
