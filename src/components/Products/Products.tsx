@@ -191,6 +191,7 @@ const ProductList = () => {
                 <TableCell align="center">Kategoriya</TableCell>
                 <TableCell align="center">Narxi</TableCell>
                 <TableCell align="center">Muddati</TableCell>
+                <TableCell align="center">Soni</TableCell>
                 <TableCell align="center">Sozlamalar</TableCell>
               </TableRow>
             </TableHead>
@@ -208,6 +209,7 @@ const ProductList = () => {
                   <TableCell align="center">{product.category}</TableCell>
                   <TableCell align="center">{product.price}</TableCell>
                   <TableCell align="center">{product.expiryDate}</TableCell>
+                  <TableCell align="center">{product.stock}</TableCell>
                   <TableCell align="center">
                     <IconButton
                       onClick={(e) => handleOpenMenu(e, product.id)}
@@ -332,7 +334,7 @@ const ProductList = () => {
               Yoq
             </Button>
             <Button
-              onClick={() => handleDeleteProduct(selectedId!)} // Delete the selected product
+              onClick={() => handleDeleteProduct(selectedId!)}
               color="secondary"
               variant="contained"
               autoFocus
