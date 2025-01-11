@@ -81,7 +81,7 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
               <TableCell>{expense.name}</TableCell>
               <TableCell>{expense.date}</TableCell>
               <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.amount}</TableCell>
+              <TableCell>{expense.payment}</TableCell>
 
               <TableCell>
                 <IconButton

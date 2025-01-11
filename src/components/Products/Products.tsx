@@ -41,6 +41,7 @@ const ProductList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [getData, setData] = useState<Products[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",

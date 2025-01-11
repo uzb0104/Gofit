@@ -14,6 +14,15 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { supabase } from "../../types/types/supabase";
+
+interface Expenses {
+  id: number;
+  name: string;
+  date: string;
+  descriptioon: string;
+  payment: number;
+}
 
 const Expenses: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>(() => {
@@ -24,21 +33,28 @@ const Expenses: React.FC = () => {
   const [newExpense, setNewExpense] = useState<Omit<Expense, "id">>({
     name: "",
     date: "",
-    amount: 0,
+    payment: 0,
     description: "",
   });
+
+  const setNewExpenses = async () => {
+    const { data, error } = await supabase.from("Expenses").insert({
+      ...setNewExpense,
+    });
+  };
 
   const [editExpenseId, setEditExpenseId] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
+  const [getDataBase, setDataBase] = useState<Expenses[]>([]);
 
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
   const handleAddOrEdit = () => {
-    if (newExpense.name && newExpense.date && newExpense.amount > 0) {
+    if (newExpense.name && newExpense.date && newExpense.payment > 0) {
       if (editExpenseId) {
         setExpenses((prev) =>
           prev.map((expense) =>
@@ -60,12 +76,12 @@ const Expenses: React.FC = () => {
       setNewExpense({
         name: "",
         date: "",
-        amount: 0,
+        payment: 0,
         description: "",
       });
       setIsAddModalOpen(false);
     } else {
-      alert("Please fill out all fields.");
+      alert("Iltimos qatorlarni to'ldiring");
     }
   };
 
@@ -176,11 +192,11 @@ const Expenses: React.FC = () => {
             <TextField
               label="To'lov so'mmasi"
               type="number"
-              value={newExpense.amount}
+              value={newExpense.payment}
               onChange={(e) =>
                 setNewExpense({
                   ...newExpense,
-                  amount: parseFloat(e.target.value) || 0,
+                  payment: parseFloat(e.target.value) || 0,
                 })
               }
               fullWidth

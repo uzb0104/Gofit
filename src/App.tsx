@@ -16,7 +16,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        <div style={{ flexGrow: 0 }}>
+        <div>
           <AdminNavbar />
 
           <Box
