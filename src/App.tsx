@@ -11,6 +11,9 @@ import UserList from "./components/Products/Products";
 import GymStats from "./components/Statistics/GymStats";
 import { Box } from "@mui/material";
 import Home from "./components/Sidebarhome/Home";
+import AttendanceComponent from "./components/Attandance/Attendance";
+import Attendance from "./components/Attandance/Attendance";
+import AttendanceData from "./components/Attandance/Attendance";
 
 const App: React.FC = () => {
   return (
@@ -54,6 +57,8 @@ const App: React.FC = () => {
                 />
                 <Route path="/home" element={<Home />} />
                 <Route path="/members" element={<Members />} />
+                <Route path="/attendance" element={<Attendance />} />
+                <Route path="/attendancedata" element={<AttendanceData />} />
                 <Route path="/payment" element={<PaymentManagment />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/userlist" element={<UserList />} />
@@ -66,5 +71,6 @@ const App: React.FC = () => {
     </Router>
   );
 };
+
 
 export default App;

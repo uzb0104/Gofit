@@ -31,8 +31,8 @@ interface Products {
   name: string;
   category: string;
   price: string;
-  date: number;
-  stock: number;
+  date: string;
+  stock: string;
 }
 
 const ProductList = () => {
@@ -104,17 +104,17 @@ const ProductList = () => {
   };
 
   const handleEditProduct = (id: number) => {
-    // const productToEdit = products.find((product) => product.id === id);
-    // if (productToEdit) {
-    //   setNewProduct({
-    //     name: productToEdit.name,
-    //     category: productToEdit.category,
-    //     price: productToEdit.price,
-    //     stock: productToEdit.stock,
-    //     data: productToEdit.data,
-    //   });
-    //   setDialogOpen(true);
-    // }
+    const productToEdit = getData.find((product) => product.id === id);
+    if (productToEdit) {
+      setNewProduct({
+        name: productToEdit.name,
+        category: productToEdit.category,
+        price: productToEdit.price,
+        stock: productToEdit.stock,
+        date: productToEdit.date,
+      });
+      setDialogOpen(true);
+    }
   };
 
   const handleOpenDeleteModal = () => setDeleteModalOpen(true);

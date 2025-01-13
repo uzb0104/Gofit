@@ -10,5 +10,7 @@ export const PATH = {
   SIDEBAR: "/sidebar",
   TABLEADMIN: "/tableadmin",
   USERLIST: "/userlist",
-  HOME: "/home"
+  HOME: "/home",
+  ATTENDANCE: "/attandance",
+  ATTENDANCEDATA: "/attendancedata",
 };

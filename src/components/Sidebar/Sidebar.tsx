@@ -14,6 +14,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import TocIcon from "@mui/icons-material/Toc";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const Sidebar = () => {
@@ -22,6 +23,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: "Bosh sahifa", icon: <MenuIcon />, link: "/home" },
     { name: "Foydalanuvchilar", icon: <GroupIcon />, link: "/members" },
+    { name: "Davomat", icon: <CheckCircleIcon />, link: "/attendance" },
     { name: "To'lovlar", icon: <PaymentIcon />, link: "/payment" },
     { name: "Maxsulotlar", icon: <TocIcon />, link: "/userlist" },
     { name: "Xarajatlar", icon: <AssuredWorkloadIcon />, link: "/services" },
@@ -33,7 +35,7 @@ const Sidebar = () => {
     <Box
       sx={{
         backgroundColor: "#fff",
-        color: "#2e2e2e",
+
         height: "calc(100vh - 45px)",
         width: "240px",
         borderRight: "1px solid #3516c0",
