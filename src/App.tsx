@@ -7,13 +7,12 @@ import Members from "./components/MembersTable/Members";
 
 import PaymentManagment from "./components/PaymentSection/Payment";
 import Services from "./components/Expenses/Services";
-import UserList from "./components/Products/Products";
 import GymStats from "./components/Statistics/GymStats";
 import { Box } from "@mui/material";
 import Home from "./components/Sidebarhome/Home";
-import AttendanceComponent from "./components/Attandance/Attendance";
 import Attendance from "./components/Attandance/Attendance";
 import AttendanceData from "./components/Attandance/Attendance";
+import ProductList from "./components/Products/Products";
 
 const App: React.FC = () => {
   return (
@@ -25,7 +24,6 @@ const App: React.FC = () => {
           <Box
             sx={{
               display: "flex",
-              minHeight: "calc(100vh - 50px)",
               overflow: "hidden",
             }}
           >
@@ -33,35 +31,20 @@ const App: React.FC = () => {
             <Box
               sx={{
                 flexGrow: 1,
-                overflowY: "auto",
+                overflow: "auto",
                 padding: 2,
-                height: "calc(100vh - 50px)",
-                border: "1px solid ",
+                maxHeight: "calc(100vh - 82px)",
               }}
             >
               <Routes>
-                <Route
-                  path="/adminprofile"
-                  element={
-                    <AdminProfile
-                      name="Admin Name"
-                      email="admin@example.com"
-                      phone="123-456-7890"
-                      status="Active"
-                      startDate="2024-12-01"
-                      lastLogin="2024-11-25"
-                      role="Administrator"
-                      avatar="path/to/avatar.jpg"
-                    />
-                  }
-                />
+                <Route path="/adminprofile" element={<AdminProfile />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/members" element={<Members />} />
                 <Route path="/attendance" element={<Attendance />} />
                 <Route path="/attendancedata" element={<AttendanceData />} />
                 <Route path="/payment" element={<PaymentManagment />} />
                 <Route path="/services" element={<Services />} />
-                <Route path="/userlist" element={<UserList />} />
+                <Route path="/product" element={<ProductList />} />
                 <Route path="/gymstats" element={<GymStats />} />
               </Routes>
             </Box>
@@ -71,6 +54,5 @@ const App: React.FC = () => {
     </Router>
   );
 };
-
 
 export default App;

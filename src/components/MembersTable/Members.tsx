@@ -89,7 +89,7 @@ const Members: React.FC = () => {
       setMembers((prev) =>
         prev.filter((member) => member.id !== memberToDelete)
       );
-      setIsDeleteModalOpen(false);
+      setIsDeleteModalOpen(false); 
       setMemberToDelete(null);
     }
   };
@@ -99,7 +99,7 @@ const Members: React.FC = () => {
   };
 
   return (
-    <Box sx={{ padding: "20px" }}>
+    <Box sx={{ padding: "20px", height: "calc(100vh - 82px)" }}>
       <Container>
         <Typography
           variant="h4"
@@ -142,7 +142,6 @@ const Members: React.FC = () => {
         }}
       />
 
-      {/* Add or Edit Modal */}
       <Modal
         open={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

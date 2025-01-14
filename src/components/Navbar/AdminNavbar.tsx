@@ -33,30 +33,30 @@ const AdminNavbar: React.FC = () => {
         sx={{
           bgcolor: "#fff",
           height: 50,
-          borderBottom: "1px solid  #3516c0",
+          borderBottom: "2px solid  #3516c0",
         }}
       >
         <Toolbar>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
             <SportsMartialArtsIcon
               fontSize="medium"
-              sx={{ color: "#3516c0", mb: 1.5 }}
+              sx={{ color: "#3516c0" }}
             />
             <Typography
               variant="h5"
-              sx={{ fontWeight: "bold", color: "#3516c0", mb: 1.5 }}
+              sx={{ fontWeight: "bold", color: "#3516c0" }}
             >
               Gofit
             </Typography>
           </Box>
 
-          <Box sx={{ flexGrow: 1, textAlign: "center" }}>
-            <Typography sx={{ fontSize: "20px", color: "#3516c0", mb: 2 }}>
+          <Box sx={{ flexGrow: 1, textAlign: "center", mb: 1.5 }}>
+            <Typography sx={{ fontSize: "20px", color: "#3516c0" }}>
               Sport zal menejeri
             </Typography>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
             <IconButton
               size="small"
               edge="end"
@@ -73,7 +73,6 @@ const AdminNavbar: React.FC = () => {
                   width: 30,
                   height: 30,
                   bgcolor: "#3516c0",
-                  mb: 1.5,
                 }}
               />
             </IconButton>

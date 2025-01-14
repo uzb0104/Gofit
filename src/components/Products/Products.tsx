@@ -20,6 +20,7 @@ import {
   DialogActions,
   TextField,
   Box,
+  CircularProgress,
 } from "@mui/material";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -41,6 +42,7 @@ const ProductList = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [getData, setData] = useState<Products[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -51,13 +53,16 @@ const ProductList = () => {
   });
 
   const fetchData = async () => {
+    setLoading(true);
     const { data, error } = await supabase.from("Products").select("*");
 
     if (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
       return;
     }
     setData(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -92,7 +97,7 @@ const ProductList = () => {
     });
 
     if (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error adding product:", error);
       return;
     }
     fetchData();
@@ -120,7 +125,7 @@ const ProductList = () => {
   const handleOpenDeleteModal = () => setDeleteModalOpen(true);
 
   return (
-    <Container>
+    <Container sx={{ height: "calc(100vh - 85px)" }}>
       <Stack spacing={3} padding={2}>
         <Box>
           <Typography
@@ -148,78 +153,84 @@ const ProductList = () => {
           </Button>
         </Box>
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="product table">
-            <TableHead sx={{ bgcolor: "#3516c0" }}>
-              <TableRow
-                sx={{
-                  "& th": {
-                    fontWeight: "bold",
-                    color: "white",
-                    padding: "16px 24px",
-                    textAlign: "center",
-                  },
-                }}
-              >
-                <TableCell>Mahsulot Nomi</TableCell>
-                <TableCell align="center">Kategoriya</TableCell>
-                <TableCell align="center">Narxi</TableCell>
-                <TableCell align="center">Muddati</TableCell>
-                <TableCell align="center">Soni</TableCell>
-                <TableCell align="center">Sozlamalar</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {getData.map((product) => (
+        {loading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+            <CircularProgress sx={{ color: "#3516c0" }} />
+          </Box>
+        ) : (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="product table">
+              <TableHead sx={{ bgcolor: "#3516c0" }}>
                 <TableRow
-                  key={product.id}
                   sx={{
-                    "&:hover": {
-                      bgcolor: "#2e2e2e1a",
+                    "& th": {
+                      fontWeight: "bold",
+                      color: "white",
+                      padding: "16px 24px",
+                      textAlign: "center",
                     },
                   }}
                 >
-                  <TableCell align="center">{product.name}</TableCell>
-                  <TableCell align="center">{product.category}</TableCell>
-                  <TableCell align="center">{product.price}</TableCell>
-                  <TableCell align="center">{product.date}</TableCell>
-                  <TableCell align="center">{product.stock}</TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={(e) => handleOpenMenu(e, product.id)}
-                      color="primary"
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl && selectedId === product.id)}
-                      onClose={handleCloseMenu}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          handleEditProduct(product.id);
-                          handleCloseMenu();
-                        }}
-                      >
-                        Tahrirlash
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          setSelectedId(product.id);
-                          handleOpenDeleteModal();
-                          handleCloseMenu();
-                        }}
-                      >
-                        O'chirish
-                      </MenuItem>
-                    </Menu>
-                  </TableCell>
+                  <TableCell>Mahsulot Nomi</TableCell>
+                  <TableCell align="center">Kategoriya</TableCell>
+                  <TableCell align="center">Narxi</TableCell>
+                  <TableCell align="center">Muddati</TableCell>
+                  <TableCell align="center">Soni</TableCell>
+                  <TableCell align="center">Sozlamalar</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {getData.map((product) => (
+                  <TableRow
+                    key={product.id}
+                    sx={{
+                      "&:hover": {
+                        bgcolor: "#2e2e2e1a",
+                      },
+                    }}
+                  >
+                    <TableCell align="center">{product.name}</TableCell>
+                    <TableCell align="center">{product.category}</TableCell>
+                    <TableCell align="center">{product.price}</TableCell>
+                    <TableCell align="center">{product.date}</TableCell>
+                    <TableCell align="center">{product.stock}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        onClick={(e) => handleOpenMenu(e, product.id)}
+                        color="primary"
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl && selectedId === product.id)}
+                        onClose={handleCloseMenu}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            handleEditProduct(product.id);
+                            handleCloseMenu();
+                          }}
+                        >
+                          Tahrirlash
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setSelectedId(product.id);
+                            handleOpenDeleteModal();
+                            handleCloseMenu();
+                          }}
+                        >
+                          O'chirish
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
 
         <Dialog open={dialogOpen} onClose={handleDialogClose}>
           <DialogContent>

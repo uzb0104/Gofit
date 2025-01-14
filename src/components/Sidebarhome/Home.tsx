@@ -3,7 +3,13 @@ import { Box, Typography, Container } from "@mui/material";
 
 const Home: React.FC = () => {
   return (
-    <Container sx={{ textAlign: "center", padding: "50px" }}>
+    <Container
+      sx={{
+        textAlign: "center",
+        padding: "90px",
+        height: "calc(100vh - 82px)",
+      }}
+    >
       <Box sx={{ marginBottom: "20px" }}>
         <Typography
           variant="h4"

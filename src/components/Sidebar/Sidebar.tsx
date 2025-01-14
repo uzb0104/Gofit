@@ -25,7 +25,7 @@ const Sidebar = () => {
     { name: "Foydalanuvchilar", icon: <GroupIcon />, link: "/members" },
     { name: "Davomat", icon: <CheckCircleIcon />, link: "/attendance" },
     { name: "To'lovlar", icon: <PaymentIcon />, link: "/payment" },
-    { name: "Maxsulotlar", icon: <TocIcon />, link: "/userlist" },
+    { name: "Maxsulotlar", icon: <TocIcon />, link: "/product" },
     { name: "Xarajatlar", icon: <AssuredWorkloadIcon />, link: "/services" },
     { name: "Statistika", icon: <AssessmentIcon />, link: "/gymstats" },
     { name: "Profile", icon: <AccountCircleIcon />, link: "/adminprofile" },
@@ -36,13 +36,10 @@ const Sidebar = () => {
       sx={{
         backgroundColor: "#fff",
 
-        height: "calc(100vh - 45px)",
         width: "240px",
-        borderRight: "1px solid #3516c0",
-        borderTop: "1px solid #3516c0",
-        boxShadow: "1px 1px #3362ad",
-        overflowY: "auto",
-        overflow: "hidden",
+        borderRight: "2px solid #3516c0",
+
+        overflowY: "hidden",
       }}
     >
       <Container>

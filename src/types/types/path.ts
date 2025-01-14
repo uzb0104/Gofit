@@ -10,6 +10,7 @@ export const PATH = {
   SIDEBAR: "/sidebar",
   TABLEADMIN: "/tableadmin",
   USERLIST: "/userlist",
+  PRODUCTLIST: "/product",
   HOME: "/home",
   ATTENDANCE: "/attandance",
   ATTENDANCEDATA: "/attendancedata",

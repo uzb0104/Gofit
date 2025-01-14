@@ -84,7 +84,7 @@ const UserManagement: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{ height: "calc(100vh - 50px)" }}>
       <Box
         sx={{
           padding: 4,

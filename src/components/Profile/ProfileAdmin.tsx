@@ -1,231 +1,291 @@
 import React, { useState } from "react";
 import {
-  Button,
-  TextField,
-  Paper,
-  Typography,
-  Snackbar,
   Box,
-  IconButton,
+  TextField,
+  Typography,
   Avatar,
-  Card,
-  CardContent,
-  CardActions,
+  Grid,
+  Button,
+  Dialog,
+  DialogTitle,
+  IconButton,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
 
-interface AdminType {
-  name: string;
-  email: string;
-  phone: string;
-  status: string;
-  startDate: string;
-  lastLogin: string;
-  role: string;
-  avatar: string;
-}
+const PersonalInfoForm: React.FC = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    phoneNumber: "",
+    country: "",
+    city: "",
+    address: "",
+    postalCode: "",
+    picture: "/path/to/default-picture.jpg",
+  });
 
-const ProfileAdmin: React.FC<AdminType> = ({
-  name,
-  email,
-  phone,
-  startDate,
-  lastLogin,
-  role,
-  avatar,
-}) => {
-  const [editable, setEditable] = useState(false);
-  const [formData, setFormData] = useState({ name, email, phone });
-  const [profileAvatar, setProfileAvatar] = useState(avatar);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [statuses, setStatuses] = useState<string[]>([]);
-  const [newStatus, setNewStatus] = useState("");
+  const [originalData] = useState(formData);
+  const [isModalOpen, setIsModalOpen] = useState(true); // Modalni birlamchi ochilgan holatda o'rnatamiz
 
-  const handleEdit = () => setEditable(true);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handlePictureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const newPicture = URL.createObjectURL(e.target.files[0]);
+      setFormData({ ...formData, picture: newPicture });
+    }
+  };
+
+  const handleDeletePicture = () => {
+    setFormData({ ...formData, picture: "" });
+  };
+
+  const handleReset = () => {
+    setFormData(originalData);
+  };
+
   const handleSave = () => {
-    setEditable(false);
-    setSnackbarOpen(true);
+    console.log("Saved data:", formData);
+    setIsModalOpen(false); 
   };
 
-  const handleCancel = () => {
-    setEditable(false);
-    setFormData({ name, email, phone });
-  };
-
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setProfileAvatar(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleAddStatus = () => {
-    if (newStatus.trim()) {
-      setStatuses([...statuses, newStatus]);
-      setNewStatus("");
-    }
-  };
-
-  const handleDeleteStatus = (index: number) => {
-    const updatedStatuses = statuses.filter((_, i) => i !== index);
-    setStatuses(updatedStatuses);
+  const handleModalClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <Paper
-      sx={{
-        padding: 4,
-        maxWidth: 700,
-        margin: "0 auto",
-        borderRadius: 3,
-        mt: 4,
-        boxShadow: 5,
-        bgcolor: "#f9f9f9",
-      }}
+    <Dialog
+      open={isModalOpen}
+      onClose={handleModalClose}
+      fullWidth
+      maxWidth="md"
     >
-      <Box
-        sx={{ display: "flex", alignItems: "center", gap: 3, marginBottom: 3 }}
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
       >
-        <label htmlFor="avatar-upload">
-          <input
-            id="avatar-upload"
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleAvatarChange}
-          />
-          <Avatar
-            src={profileAvatar}
-            sx={{
-              width: 80,
-              height: 80,
-              cursor: "pointer",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-            }}
-          />
-        </label>
-        <Box sx={{ color: "#3516c0" }}>
-          <Typography variant="h4" fontWeight="bold">
-            Admin Profile
-          </Typography>
-          <Typography variant="subtitle1" >
-            {role}
-          </Typography>
-        </Box>
-      </Box>
-      <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
-        <TextField
-          label="Name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          fullWidth
-          disabled={!editable}
-        />
-        <TextField
-          label="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          fullWidth
-          disabled={!editable}
-          sx={{ mt: 2 }}
-        />
-        <TextField
-          label="Phone"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          fullWidth
-          disabled={!editable}
-          sx={{ mt: 2 }}
-        />
-      </Box>
-      <Box sx={{ display: "flex", gap: 1, mt: 3 }}>
-        <IconButton
-          color="primary"
-          onClick={editable ? handleSave : handleEdit}
-        >
-          {editable ? <SaveIcon /> : <EditIcon />}
+        Personal Information
+        <IconButton onClick={handleModalClose}>
+          <CloseIcon />
         </IconButton>
-        {editable && (
-          <IconButton color="secondary" onClick={handleCancel}>
-            <CancelIcon />
-          </IconButton>
-        )}
-      </Box>
+      </DialogTitle>
+      <Box
+        sx={{
+          p: 3,
+          border: "1px solid #ccc",
+          borderRadius: 2,
+          backgroundColor: "#fff",
+        }}
+      >
+        <Grid alignItems="center">
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <Grid item xs={4}>
+              <Avatar
+                src={formData.picture}
+                alt="Profile"
+                sx={{ width: 80, height: 80 }}
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <Button
+                variant="contained"
+                component="label"
+                sx={{
+                  mr: 1,
+                  backgroundColor: "#1BA98F",
+                  borderRadius: "100px",
+                }}
+              >
+                Upload new picture
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  onChange={handlePictureUpload}
+                />
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={handleDeletePicture}
+                style={{
+                  borderRadius: "100px",
+                  maxWidth: "500px",
+                  width: "100%",
+                }}
+              >
+                Delete Picture
+              </Button>
+            </Grid>
+          </div>
+        </Grid>
 
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom sx={{color: "#3516c0" }}>
-          Statuses
+        <Box sx={{ mt: 3 }}>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <TextField
+              fullWidth
+              label="First Name"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Last Name"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", gap: "20px" }}>
+            <TextField
+              fullWidth
+              label="Date of Birth"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Phone Number"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </div>
+        </Box>
+
+        <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+          Personal Address
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-          <TextField
-            label="Add Status"
-            value={newStatus}
-            onChange={(e) => setNewStatus(e.target.value)}
-            fullWidth
-          />
+        <Box>
+          <div style={{ display: "flex", gap: "20px" }}>
+            <TextField
+              fullWidth
+              label="Country"
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="City"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", gap: "20px" }}>
+            <TextField
+              fullWidth
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Postal Code"
+              name="postalCode"
+              value={formData.postalCode}
+              onChange={handleInputChange}
+              sx={{
+                mb: 2,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "100px",
+                },
+              }}
+            />
+          </div>
+        </Box>
+
+        <Box sx={{ mt: 2, display: "flex", gap: "20px" }}>
+          <Button
+            variant="outlined"
+            color="warning"
+            onClick={handleReset}
+            style={{
+              paddingLeft: "80px",
+              paddingRight: "80px",
+              maxWidth: "430px",
+              width: "100%",
+              borderRadius: "100px",
+            }}
+          >
+            Reset
+          </Button>
           <Button
             variant="contained"
-            onClick={handleAddStatus}
-            sx={{
-              bgcolor: "#3516c0",
-              "&:hover": { bgcolor: "#3516c0fc" },
-              boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.2)",
+            color="primary"
+            onClick={handleSave}
+            style={{
+              backgroundColor: "#1BA98F",
+              paddingLeft: "80px",
+              paddingRight: "80px",
+              maxWidth: "430px",
+              width: "100%",
+              borderRadius: "100px",
             }}
           >
-            Add
+            Save
           </Button>
         </Box>
-        {statuses.map((status, index) => (
-          <Card
-            key={index}
-            sx={{
-              mt: 2,
-              boxShadow: 3,
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              p: 2,
-              bgcolor: "#ffffff",
-            }}
-          >
-            <CardContent sx={{ flex: 1 }}>
-              <Typography variant="body1">{status}</Typography>
-            </CardContent>
-            <CardActions>
-              <IconButton
-                color="error"
-                onClick={() => handleDeleteStatus(index)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          </Card>
-        ))}
       </Box>
-
-     
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message="Profile updated successfully"
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        ContentProps={{
-          style: {
-            backgroundColor: "#57ce1b",
-            color: "#fff",
-            borderRadius: 10,
-          },
-        }}
-      />
-    </Paper>
+    </Dialog>
   );
 };
 
-export default ProfileAdmin;
+export default PersonalInfoForm;

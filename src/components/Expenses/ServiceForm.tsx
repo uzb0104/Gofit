@@ -101,7 +101,7 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
                       handleCloseMenu();
                     }}
                   >
-                   Tahrirlash
+                    Tahrirlash
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
