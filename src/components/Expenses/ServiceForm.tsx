@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHead,
@@ -8,11 +8,11 @@ import {
   IconButton,
   TableContainer,
   Paper,
-  Tooltip,
   Menu,
   MenuItem,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { supabase } from "../../types/types/supabase";
 import { Expense } from "../../types/types/Expense";
 
 interface ExpenseTableProps {
@@ -26,8 +26,8 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [selectedId, setSelectedId] = React.useState<number | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, id: number) => {
     setAnchorEl(event.currentTarget);
@@ -37,6 +37,22 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedId(null);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      const { error } = await supabase.from("expenses").delete().eq("id", id);
+      if (error) {
+        console.error("Error deleting expense:", error);
+        alert("Serverda Xatolik. Iltimos keyinroq urinib ko'ring !!");
+      } else {
+        onDelete(id);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    } finally {
+      handleCloseMenu();
+    }
   };
 
   return (
@@ -58,7 +74,7 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
           >
             <TableCell>Xarajat nomi</TableCell>
             <TableCell>Sana</TableCell>
-            <TableCell> Izoh</TableCell>
+            <TableCell>Izoh</TableCell>
             <TableCell>To'lov</TableCell>
             <TableCell>Sozlamalar</TableCell>
           </TableRow>
@@ -82,7 +98,6 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
               <TableCell>{expense.date}</TableCell>
               <TableCell>{expense.description}</TableCell>
               <TableCell>{expense.payment}</TableCell>
-
               <TableCell>
                 <IconButton
                   onClick={(e) => handleOpenMenu(e, expense.id)}
@@ -95,20 +110,10 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
                   open={Boolean(anchorEl && selectedId === expense.id)}
                   onClose={handleCloseMenu}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      onEdit(expense.id);
-                      handleCloseMenu();
-                    }}
-                  >
+                  <MenuItem onClick={() => onEdit(expense.id)}>
                     Tahrirlash
                   </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      onDelete(expense.id);
-                      handleCloseMenu();
-                    }}
-                  >
+                  <MenuItem onClick={() => handleDelete(expense.id)}>
                     O'chirish
                   </MenuItem>
                 </Menu>

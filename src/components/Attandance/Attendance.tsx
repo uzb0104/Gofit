@@ -15,22 +15,38 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import { supabase } from "../../types/types/supabase";
 
 interface Attendance {
   id: number;
   fullname: string;
   attendance: boolean[];
+  year: number;
+  month: number;
 }
 
 const AttendanceTable = () => {
   const [students, setStudents] = useState<Attendance[]>([]);
   const [newStudentName, setNewStudentName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState<number>(
+    new Date().getFullYear()
+  );
+  const [selectedMonth, setSelectedMonth] = useState<number>(
+    new Date().getMonth() + 1
+  );
 
   const fetchData = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("Attendance").select("*");
+    const { data, error } = await supabase
+      .from("Attendance")
+      .select("*")
+      .eq("year", selectedYear)
+      .eq("month", selectedMonth);
+
     if (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -43,6 +59,8 @@ const AttendanceTable = () => {
       attendance: Array.isArray(record.attendance)
         ? record.attendance
         : Array(31).fill(false),
+      year: record.year,
+      month: record.month,
     }));
 
     setStudents(formattedData || []);
@@ -51,7 +69,7 @@ const AttendanceTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedYear, selectedMonth]);
 
   const handleAttendanceChange = async (
     studentIndex: number,
@@ -78,16 +96,14 @@ const AttendanceTable = () => {
 
   const handleAddStudent = async () => {
     if (newStudentName.trim() !== "") {
-      const currentDate = new Date().toISOString().split("T")[0];
-
-      // Supabase'ga yangi foydalanuvchini qo'shish
       const { data, error } = await supabase
         .from("Attendance")
         .insert([
           {
             fullname: newStudentName,
-            attendance: Array(31).fill(false), // 31 kunlik attendace massivini bo'sh qilib yuborish
-            date: currentDate,
+            attendance: Array(31).fill(false),
+            year: selectedYear,
+            month: selectedMonth,
           },
         ])
         .select();
@@ -108,6 +124,8 @@ const AttendanceTable = () => {
           id: data[0].id,
           fullname: newStudentName,
           attendance: Array(31).fill(false),
+          year: selectedYear,
+          month: selectedMonth,
         },
       ]);
       setNewStudentName("");
@@ -118,17 +136,73 @@ const AttendanceTable = () => {
     return attendance.filter((attended) => !attended).length;
   };
 
+  const handleMonthChange = (increment: boolean) => {
+    if (increment) {
+      if (selectedMonth === 12) {
+        setSelectedMonth(1);
+        setSelectedYear((prev) => prev + 1);
+      } else {
+        setSelectedMonth((prev) => prev + 1);
+      }
+    } else {
+      if (selectedMonth === 1) {
+        setSelectedMonth(12);
+        setSelectedYear((prev) => prev - 1);
+      } else {
+        setSelectedMonth((prev) => prev - 1);
+      }
+    }
+  };
+
+  const months = [
+    "Yanvar",
+    "Fevral",
+    "Mart",
+    "Aprel",
+    "May",
+    "Iyun",
+    "Iyul",
+    "Avgust",
+    "Sentabr",
+    "Oktabr",
+    "Noyabr",
+    "Dekabr",
+  ];
+
   return (
-    <Container sx={{ mt: 2, height: "calc(100vh - 98px)" }}>
+    <Container sx={{ mt: 3, height: "calc(100vh - 100px)" }}>
       <Typography
         variant="h4"
         align="center"
         gutterBottom
         fontWeight={"bold"}
         color="#3516c0"
+        sx={{ mb: 4 }}
       >
         Davomat
       </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Button onClick={() => handleMonthChange(false)} variant="text">
+          <ChevronLeftIcon />
+        </Button>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: "bold", mx: 2, color: "#3516c0" }}
+        >
+          {months[selectedMonth - 1]} {selectedYear}
+        </Typography>
+        <Button onClick={() => handleMonthChange(true)} variant="text">
+          <ChevronRightIcon />
+        </Button>
+      </Box>
 
       {loading ? (
         <Box
@@ -143,23 +217,37 @@ const AttendanceTable = () => {
         </Box>
       ) : (
         <>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-            <TextField
-              label="Foydalanuvchi to'liq ismi"
-              value={newStudentName}
-              onChange={(e) => setNewStudentName(e.target.value)}
-              sx={{ flexGrow: 1, mr: 2 }}
-            />
+          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+            <Box sx={{ flex: 1 }}>
+              <TextField
+                label="Foydalanuvchi to'liq ismi"
+                value={newStudentName}
+                onChange={(e) => setNewStudentName(e.target.value)}
+                fullWidth
+                sx={{
+                  borderRadius: 2,
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  width: 950,
+                }}
+              />
+            </Box>
+
             <Button
               variant="contained"
-              sx={{ bgcolor: "#3516c0", height: 55 }}
+              sx={{
+                bgcolor: "#3516c0",
+                height: 55,
+                width: "150px",
+                borderRadius: 2,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
               onClick={handleAddStudent}
             >
               Qo'shish
             </Button>
           </Box>
 
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ boxShadow: 4 }}>
             <Table sx={{ width: "100%" }}>
               <TableHead>
                 <TableRow>
@@ -179,6 +267,7 @@ const AttendanceTable = () => {
                         fontWeight: "bold",
                         backgroundColor: "#3516c0",
                         color: "#fff",
+                        minWidth: "30px",
                       }}
                     >
                       {i + 1}

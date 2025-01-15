@@ -13,16 +13,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  CircularProgress,
 } from "@mui/material";
 import { supabase } from "../../types/types/supabase";
-
-interface Expenses {
-  id: number;
-  name: string;
-  date: string;
-  descriptioon: string;
-  payment: number;
-}
 
 const Expenses: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>(() => {
@@ -37,17 +30,42 @@ const Expenses: React.FC = () => {
     description: "",
   });
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const setNewExpenses = async () => {
     const { data, error } = await supabase.from("Expenses").insert({
-      ...setNewExpense,
+      name: newExpense.name,
+      date: newExpense.date,
+      payment: newExpense.payment,
+      description: newExpense.description,
     });
+
+    if (error) {
+      console.error("Error inserting data:", error);
+    } else {
+      console.log("Inserted data:", data);
+    }
   };
 
   const [editExpenseId, setEditExpenseId] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
-  const [getDataBase, setDataBase] = useState<Expenses[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchExpenses = async () => {
+      const { data, error } = await supabase.from("Expenses").select("*");
+      if (error) {
+        console.error("Error fetching expenses:", error);
+      } else {
+        setExpenses(data);
+      }
+      setLoading(false);
+    };
+
+    fetchExpenses();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
@@ -72,6 +90,7 @@ const Expenses: React.FC = () => {
             ...newExpense,
           },
         ]);
+        setNewExpenses();
       }
       setNewExpense({
         name: "",
@@ -96,7 +115,7 @@ const Expenses: React.FC = () => {
   };
 
   return (
-    <Box sx={{ padding: "20px" }}>
+    <Box sx={{ padding: "20px", height: "calc(100vh - 12px)" }}>
       <Container>
         <Typography
           variant="h4"
@@ -113,27 +132,33 @@ const Expenses: React.FC = () => {
             bgcolor: "#3516c0",
             height: 40,
             marginBottom: "20px",
-            ml: 120,
+            ml: 132,
           }}
         >
           Xarajatlar
         </Button>
       </Container>
-      <ExpenseTable
-        expenses={expenses}
-        onEdit={(id) => {
-          const expenseToEdit = expenses.find((expense) => expense.id === id);
-          if (expenseToEdit) {
-            setNewExpense(expenseToEdit);
-            setEditExpenseId(id);
-            setIsAddModalOpen(true);
-          }
-        }}
-        onDelete={(id) => {
-          setExpenseToDelete(id);
-          setIsDeleteModalOpen(true);
-        }}
-      />
+      {loading ? (
+        <Box sx={{ textAlign: "center", marginTop: "20px" }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <ExpenseTable
+          expenses={expenses}
+          onEdit={(id) => {
+            const expenseToEdit = expenses.find((expense) => expense.id === id);
+            if (expenseToEdit) {
+              setNewExpense(expenseToEdit);
+              setEditExpenseId(id);
+              setIsAddModalOpen(true);
+            }
+          }}
+          onDelete={(id) => {
+            setExpenseToDelete(id);
+            setIsDeleteModalOpen(true);
+          }}
+        />
+      )}
 
       <Modal
         open={isAddModalOpen}

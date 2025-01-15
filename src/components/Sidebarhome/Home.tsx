@@ -6,7 +6,7 @@ const Home: React.FC = () => {
     <Container
       sx={{
         textAlign: "center",
-        padding: "90px",
+        padding: "70px",
         height: "calc(100vh - 82px)",
       }}
     >
