@@ -10,6 +10,7 @@ import {
   Paper,
   Menu,
   MenuItem,
+  Container,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { supabase } from "../../types/types/supabase";
@@ -56,73 +57,75 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
   };
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ boxShadow: 3, borderRadius: 2, mt: 3 }}
-    >
-      <Table sx={{ minWidth: 650, borderCollapse: "collapse" }}>
-        <TableHead>
-          <TableRow
-            sx={{
-              backgroundColor: "#3516c0",
-              "& th": {
-                fontWeight: "bold",
-                color: "white",
-                padding: "16px 24px",
-              },
-            }}
-          >
-            <TableCell>Xarajat nomi</TableCell>
-            <TableCell>Sana</TableCell>
-            <TableCell>Izoh</TableCell>
-            <TableCell>To'lov</TableCell>
-            <TableCell>Sozlamalar</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {expenses.map((expense) => (
+    <Container>
+      <TableContainer
+        component={Paper}
+        sx={{ boxShadow: 3, borderRadius: 2, mt: 3 }}
+      >
+        <Table sx={{ minWidth: 550, borderCollapse: "collapse" }}>
+          <TableHead>
             <TableRow
-              key={expense.id}
               sx={{
-                "&:hover": {
-                  backgroundColor: "#1976d219",
-                  cursor: "pointer",
-                },
-                borderBottom: "1px solid #4a7caf",
-                "& td": {
-                  padding: "12px 24px",
+                backgroundColor: "#3516c0",
+                "& th": {
+                  fontWeight: "bold",
+                  color: "white",
+                  padding: "16px 24px",
                 },
               }}
             >
-              <TableCell>{expense.name}</TableCell>
-              <TableCell>{expense.date}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.payment}</TableCell>
-              <TableCell>
-                <IconButton
-                  onClick={(e) => handleOpenMenu(e, expense.id)}
-                  color="primary"
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl && selectedId === expense.id)}
-                  onClose={handleCloseMenu}
-                >
-                  <MenuItem onClick={() => onEdit(expense.id)}>
-                    Tahrirlash
-                  </MenuItem>
-                  <MenuItem onClick={() => handleDelete(expense.id)}>
-                    O'chirish
-                  </MenuItem>
-                </Menu>
-              </TableCell>
+              <TableCell>Xarajat nomi</TableCell>
+              <TableCell>Sana</TableCell>
+              <TableCell>Izoh</TableCell>
+              <TableCell>To'lov</TableCell>
+              <TableCell>Sozlamalar</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {expenses.map((expense) => (
+              <TableRow
+                key={expense.id}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#1976d219",
+                    cursor: "pointer",
+                  },
+                  borderBottom: "1px solid #4a7caf",
+                  "& td": {
+                    padding: "12px 24px",
+                  },
+                }}
+              >
+                <TableCell>{expense.name}</TableCell>
+                <TableCell>{expense.date}</TableCell>
+                <TableCell>{expense.description}</TableCell>
+                <TableCell>{expense.payment}</TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={(e) => handleOpenMenu(e, expense.id)}
+                    color="primary"
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl && selectedId === expense.id)}
+                    onClose={handleCloseMenu}
+                  >
+                    <MenuItem onClick={() => onEdit(expense.id)}>
+                      Tahrirlash
+                    </MenuItem>
+                    <MenuItem onClick={() => handleDelete(expense.id)}>
+                      O'chirish
+                    </MenuItem>
+                  </Menu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 

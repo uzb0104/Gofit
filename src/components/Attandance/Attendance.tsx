@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-
 import { supabase } from "../../types/types/supabase";
 
 interface Attendance {
@@ -109,15 +108,14 @@ const AttendanceTable = () => {
         .select();
 
       if (error) {
-        console.error("Error adding student:", error);
+        console.error("Xatolik foydalanuvchi qo'sha olmisiz:", error);
         return;
       }
 
       if (!data || data.length === 0) {
-        console.error("No data returned after inserting a new student.");
+        console.error("Serverdagi xatolik birozdan so'ng urinib ko'ring.");
         return;
       }
-
       setStudents([
         ...students,
         {

@@ -115,7 +115,7 @@ const Expenses: React.FC = () => {
   };
 
   return (
-    <Box sx={{ padding: "20px", height: "calc(100vh - 12px)" }}>
+    <Box sx={{ padding: "20px", height: "calc(100vh - 85px)" }}>
       <Container>
         <Typography
           variant="h4"
@@ -236,7 +236,7 @@ const Expenses: React.FC = () => {
             }}
             fullWidth
           >
-            {editExpenseId ? "Save" : "Qo'shish"}
+            {editExpenseId ? "Qo'shish" : "Qo'shish"}
           </Button>
         </Box>
       </Modal>

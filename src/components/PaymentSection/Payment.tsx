@@ -12,7 +12,7 @@ import {
 import UserPayTable from "./UserPayTable";
 import { User } from "../../types/userpaytab";
 
-const UserManagement: React.FC = () => {
+const PaymentManagement: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState({ name: "", number: "", amount: 0 });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -194,4 +194,4 @@ const UserManagement: React.FC = () => {
   );
 };
 
-export default UserManagement;
+export default PaymentManagement;

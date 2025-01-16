@@ -8,11 +8,11 @@ import Members from "./components/MembersTable/Members";
 import PaymentManagment from "./components/PaymentSection/Payment";
 import Services from "./components/Expenses/Services";
 import GymStats from "./components/Statistics/GymStats";
-import { Box } from "@mui/material";
 import Home from "./components/Sidebarhome/Home";
 import Attendance from "./components/Attandance/Attendance";
 import AttendanceData from "./components/Attandance/Attendance";
 import ProductList from "./components/Products/Products";
+import { Box } from "@mui/material";
 
 const App: React.FC = () => {
   return (
@@ -41,7 +41,7 @@ const App: React.FC = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/members" element={<Members />} />
                 <Route path="/attendance" element={<Attendance />} />
-                <Route path="/attendancedata" element={<AttendanceData />} />
+
                 <Route path="/payment" element={<PaymentManagment />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/product" element={<ProductList />} />
