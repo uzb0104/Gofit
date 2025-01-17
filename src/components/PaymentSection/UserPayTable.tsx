@@ -1,3 +1,6 @@
+
+
+// UserPayTable.tsx
 import React from "react";
 import { User } from "../../types/userpaytab";
 import {
@@ -18,14 +21,12 @@ interface UserTableProps {
   users: User[];
   onViewProfile: (id: number) => void;
   onDeleteUser: (id: number) => void;
-  onEditUser: (id: number) => void;
 }
 
 const UserPayTable: React.FC<UserTableProps> = ({
   users,
   onViewProfile,
   onDeleteUser,
-  onEditUser,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedId, setSelectedId] = React.useState<number | null>(null);
@@ -49,7 +50,7 @@ const UserPayTable: React.FC<UserTableProps> = ({
         <TableHead>
           <TableRow
             sx={{
-              backgroundColor: "#3516c0",
+              backgroundColor: "#4A90E2",
               "& th": {
                 fontWeight: "bold",
                 color: "white",
@@ -69,10 +70,10 @@ const UserPayTable: React.FC<UserTableProps> = ({
               key={user.id}
               sx={{
                 "&:hover": {
-                  backgroundColor: "#1976d219",
+                  backgroundColor: "#f4f4f4",
                   cursor: "pointer",
                 },
-                borderBottom: "1px solid #4a7caf",
+                borderBottom: "1px solid #e0e0e0",
                 "& td": {
                   padding: "12px 24px",
                 },
@@ -99,21 +100,14 @@ const UserPayTable: React.FC<UserTableProps> = ({
                       handleCloseMenu();
                     }}
                   >
-                    Profilni ko'rish
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      onEditUser(user.id);
-                      handleCloseMenu();
-                    }}
-                  >
-                    Tahrirlash
+                    Ko'rish
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
                       onDeleteUser(user.id);
                       handleCloseMenu();
                     }}
+                    sx={{ color: "red" }}
                   >
                     O'chirish
                   </MenuItem>

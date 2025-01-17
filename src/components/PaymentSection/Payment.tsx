@@ -1,197 +1,243 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  TextField,
-  Button,
-  Box,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
-  Modal,
-  Card,
-  CardContent,
-  Container,
+  Paper,
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  TextField,
+  CircularProgress,
 } from "@mui/material";
-import UserPayTable from "./UserPayTable";
-import { User } from "../../types/userpaytab";
+import AddIcon from "@mui/icons-material/Add";
+import { supabase } from "../../types/types/supabase";
 
-const PaymentManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState({ name: "", number: "", amount: 0 });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+interface Payment {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  amount: number;
+}
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewUser({
-      ...newUser,
-      [name]: name === "amount" ? parseFloat(value) || 0 : value,
+const PaymentList = () => {
+  const [paymentData, setPaymentData] = useState<Payment[]>([]);
+  const [newPayment, setNewPayment] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    amount: "",
+  });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+    setNewPayment({
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      amount: "",
     });
   };
 
-  const handleAddUser = () => {
-    if (newUser.name && newUser.number && newUser.amount > 0) {
-      setUsers((prevUsers) => [
-        ...prevUsers,
-        {
-          id: prevUsers.length + 1,
-          name: newUser.name,
-          number: newUser.number,
-          amount: newUser.amount,
-          paid: false,
-          onViewProfile: () => handleViewProfile(prevUsers.length + 1),
-          onDeleteUser: () => handleDeleteUser(prevUsers.length + 1),
-        },
-      ]);
-      setNewUser({ name: "", number: "", amount: 0 });
+  const handleAddPayment = async () => {
+    if (
+      newPayment.firstName &&
+      newPayment.lastName &&
+      newPayment.phoneNumber &&
+      parseFloat(newPayment.amount) > 0
+    ) {
+      // Insert payment to Supabase
+      const { data, error } = await supabase
+        .from("payment") // Table name is 'payments'
+        .insert([
+          {
+            first_name: newPayment.firstName,
+            last_name: newPayment.lastName,
+            phone_number: newPayment.phoneNumber,
+            amount: parseFloat(newPayment.amount),
+          },
+        ])
+        .select();
+
+      if (error) {
+        console.error(error);
+        alert("Xatolik yuz berdi!");
+      } else {
+        setPaymentData((prevData) => [
+          ...prevData,
+          {
+            id: data[0].id,
+            firstName: data[0].first_name,
+            lastName: data[0].last_name,
+            phoneNumber: data[0].phone_number,
+            amount: data[0].amount,
+          },
+        ]);
+        setNewPayment({
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          amount: "",
+        });
+        handleDialogClose();
+      }
     } else {
       alert("Iltimos, barchasini to'ldiring!");
     }
   };
 
-  const handleDeleteUser = (id: number) => {
-    setUsers(users.filter((user) => user.id !== id));
-  };
+  const fetchPayments = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from("payment").select("*");
 
-  const handlePaymentStatusToggle = (id: number) => {
-    setUsers(
-      users.map((user) =>
-        user.id === id ? { ...user, paid: !user.paid } : user
-      )
-    );
-  };
-
-  const handleViewProfile = (id: number) => {
-    const user = users.find((user) => user.id === id);
-    if (user) {
-      setSelectedUser(user);
-      setIsModalOpen(true);
+    if (error) {
+      console.error(error);
+      alert("Xatolik yuz berdi!");
+    } else {
+      setPaymentData(data || []);
     }
+
+    setLoading(false);
   };
 
-  const handleEditUser = (id: number) => {
-    const userToEdit = users.find((user) => user.id === id);
-    if (userToEdit) {
-      setNewUser({
-        name: userToEdit.name,
-        number: userToEdit.number,
-        amount: userToEdit.amount,
-      });
-      setUsers(users.filter((user) => user.id !== id));
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedUser(null);
-  };
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   return (
-    <Container sx={{ height: "calc(100vh - 50px)" }}>
-      <Box
-        sx={{
-          padding: 4,
-          maxWidth: 800,
-          margin: "0 auto",
-          alignItems: "center",
-        }}
+    <Box sx={{ padding: 4, height: "calc(100vh - 147px)" }}>
+      <Typography
+        variant="h4"
+        fontWeight={"bold"}
+        sx={{ color: "#3516c0", alignItems: "center" }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            textAlign: "center",
-            marginBottom: 4,
-            fontWeight: "bold",
-            color: "#3516c0",
-          }}
-        >
-          Foydalanuvchilarning to'lovlari
-        </Typography>
+        Foydalanuvchilarning To'lovlari
+      </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 2,
-            marginBottom: 4,
-            justifyContent: "space-between",
-          }}
+      <Box
+        sx={{ display: "flex", justifyContent: "flex-end", marginBottom: 2 }}
+      >
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          sx={{ bgcolor: "#3516c0", "&:hover": { bgcolor: "#3516c0fc" } }}
+          onClick={handleDialogOpen}
         >
-          <TextField
-            label="Foydalanuvchi ismi"
-            name="name"
-            value={newUser.name}
-            onChange={handleInputChange}
-            fullWidth
-          />
-          <TextField
-            label="Telefon raqami"
-            name="number"
-            value={newUser.number}
-            onChange={handleInputChange}
-            fullWidth
-          />
-          <TextField
-            label="To'lov miqdori (UZS)"
-            name="amount"
-            value={newUser.amount || ""}
-            onChange={handleInputChange}
-            fullWidth
-            type="number"
-          />
+          To'lov Qo'shish
+        </Button>
+      </Box>
+
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+          <CircularProgress sx={{ color: "#3516c0" }} />
+        </Box>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="payment table">
+            <TableHead sx={{ bgcolor: "#3516c0" }}>
+              <TableRow
+                sx={{
+                  "& th": {
+                    fontWeight: "bold",
+                    color: "white",
+                    padding: "16px 24px",
+                    textAlign: "center",
+                  },
+                }}
+              >
+                <TableCell>Ism</TableCell>
+                <TableCell>Familiya</TableCell>
+                <TableCell>Telefon raqami</TableCell>
+                <TableCell>To'langan summa (UZS)</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paymentData.map((payment) => (
+                <TableRow
+                  sx={{
+                    "&:hover": {
+                      bgcolor: "#2e2e2e1a",
+                    },
+                  }}
+                >
+                  <TableCell align="center">{payment.firstName}</TableCell>
+                  <TableCell align="center">{payment.lastName}</TableCell>
+                  <TableCell align="center">{payment.phoneNumber}</TableCell>
+                  <TableCell align="center">{payment.amount} UZS</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogContent>
+          <Stack width={400} spacing={2}>
+            <Typography
+              variant="h5"
+              fontWeight={"bold"}
+              color="#3516c0"
+              textAlign={"center"}
+            >
+              To'lov Qo'shish
+            </Typography>
+            <TextField
+              label="Ism"
+              value={newPayment.firstName}
+              onChange={(e) =>
+                setNewPayment({ ...newPayment, firstName: e.target.value })
+              }
+            />
+            <TextField
+              label="Familiya"
+              value={newPayment.lastName}
+              onChange={(e) =>
+                setNewPayment({ ...newPayment, lastName: e.target.value })
+              }
+            />
+            <TextField
+              label="Telefon raqami"
+              value={newPayment.phoneNumber}
+              onChange={(e) =>
+                setNewPayment({ ...newPayment, phoneNumber: e.target.value })
+              }
+            />
+            <TextField
+              label="To'langan summa (UZS)"
+              type="number"
+              value={newPayment.amount}
+              onChange={(e) =>
+                setNewPayment({ ...newPayment, amount: e.target.value })
+              }
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="secondary">
+            Bekor qilish
+          </Button>
           <Button
+            onClick={handleAddPayment}
             variant="contained"
-            color="primary"
-            onClick={handleAddUser}
-            sx={{ width: 400, bgcolor: "#3516c0" }}
+            sx={{ bgcolor: "#3516c0", "&:hover": { bgcolor: "#3516c0fc" } }}
           >
             Qo'shish
           </Button>
-        </Box>
-
-        <UserPayTable
-          users={users}
-          onViewProfile={handleViewProfile}
-          onDeleteUser={handleDeleteUser}
-          onEditUser={handleEditUser}
-        />
-
-        <Modal open={isModalOpen} onClose={closeModal}>
-          <Card
-            sx={{
-              maxWidth: 400,
-              margin: "100px auto",
-              padding: "20px",
-              outline: "none",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Profil Ma'lumotlari
-              </Typography>
-              {selectedUser && (
-                <>
-                  <Typography variant="body1">
-                    <strong>Ism:</strong> {selectedUser.name}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Telefon raqami:</strong> {selectedUser.number}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>To'lov miqdori:</strong> {selectedUser.amount} UZS
-                  </Typography>
-                </>
-              )}
-              <Button
-                variant="contained"
-                onClick={closeModal}
-                sx={{ marginTop: "20px" }}
-              >
-                Ortga qaytish
-              </Button>
-            </CardContent>
-          </Card>
-        </Modal>
-      </Box>
-    </Container>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
-export default PaymentManagement;
+export default PaymentList;
