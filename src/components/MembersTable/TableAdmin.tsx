@@ -6,7 +6,6 @@ import {
   TableCell,
   TableBody,
   Button,
-  Typography,
   TableContainer,
   Paper,
   Tooltip,
@@ -40,7 +39,7 @@ const MemberTable: React.FC<MemberTableProps> = ({
               },
             }}
           >
-             <TableCell>Familiya</TableCell>
+            <TableCell>Familiya</TableCell>
             <TableCell>Ism</TableCell>
             <TableCell>Kontakt</TableCell>
             <TableCell>Holat</TableCell>
@@ -62,10 +61,12 @@ const MemberTable: React.FC<MemberTableProps> = ({
                 },
               }}
             >
-              <TableCell>{member.name}</TableCell>
+              <TableCell>{member.firstName}</TableCell>
+              <TableCell>{member.lastName}</TableCell>
               <TableCell>{member.contact}</TableCell>
-            
-                
+              <TableCell>{member.age}</TableCell>
+              <TableCell>{member.register}</TableCell>
+
               <TableCell>
                 <Tooltip title="Tahrirlash">
                   <Button

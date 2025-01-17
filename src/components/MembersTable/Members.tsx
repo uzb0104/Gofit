@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { supabase } from "../../types/types/supabase";
 
 const Members: React.FC = () => {
   const [members, setMembers] = useState<Member[]>(() => {
@@ -22,18 +23,19 @@ const Members: React.FC = () => {
   });
 
   const [newMember, setNewMember] = useState<Omit<Member, "id">>({
+    firstName: "",
     lastName: "",
-    name: "",
     contact: "",
     age: 0,
-    address: "",
-    registrationDate: "",
+    location: "",
+    register: "",
   });
 
   const [editMemberId, setEditMemberId] = useState<number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<number | null>(null);
+  const [getDataBaseMember, setDateBaseMember] = useState<Member[]>([]);
   const [viewProfileMember, setViewProfileMember] = useState<Member | null>(
     null
   );
@@ -44,13 +46,28 @@ const Members: React.FC = () => {
     localStorage.setItem("members", JSON.stringify(members));
   }, [members]);
 
+  const fetchData = async () => {
+    const { data, error } = await supabase.from("Members").select("*");
+
+    if (error) {
+      console.error("Error fetching data:", error);
+      return;
+    }
+
+    setDateBaseMember(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleAddOrEdit = () => {
     if (
-      newMember.name &&
+      newMember.firstName &&
       newMember.lastName &&
       newMember.contact &&
       newMember.age > 0 &&
-      newMember.address
+      newMember.location
     ) {
       if (editMemberId) {
         setMembers((prev) =>
@@ -65,17 +82,17 @@ const Members: React.FC = () => {
           {
             id: Date.now(),
             ...newMember,
-            registrationDate: new Date().toISOString(),
+            register: new Date().toISOString(),
           },
         ]);
       }
       setNewMember({
         lastName: "",
-        name: "",
+        firstName: "",
         contact: "",
         age: 0,
-        address: "",
-        registrationDate: "",
+        location: "",
+        register: "",
       });
       setIsAddModalOpen(false);
     } else {
@@ -89,13 +106,13 @@ const Members: React.FC = () => {
       setMembers((prev) =>
         prev.filter((member) => member.id !== memberToDelete)
       );
-      setIsDeleteModalOpen(false); 
+      setIsDeleteModalOpen(false);
       setMemberToDelete(null);
     }
   };
 
   const handleCloseAlert = () => {
-    setIsAlertOpen(false);
+    setIsAlertOpen(true);
   };
 
   return (
@@ -115,8 +132,9 @@ const Members: React.FC = () => {
           sx={{
             bgcolor: "#3516c0",
             height: 40,
+            width: 150,
             marginBottom: "20px",
-            ml: 120,
+            ml: 152,
           }}
         >
           A'zo qo'shish
@@ -171,17 +189,17 @@ const Members: React.FC = () => {
           <Stack spacing={2}>
             <TextField
               label="Familiya"
-              value={newMember.lastName}
+              value={newMember.firstName}
               onChange={(e) =>
-                setNewMember({ ...newMember, lastName: e.target.value })
+                setNewMember({ ...newMember, firstName: e.target.value })
               }
               fullWidth
             />
             <TextField
               label="Ism"
-              value={newMember.name}
+              value={newMember.lastName}
               onChange={(e) =>
-                setNewMember({ ...newMember, name: e.target.value })
+                setNewMember({ ...newMember, lastName: e.target.value })
               }
               fullWidth
             />
@@ -207,9 +225,9 @@ const Members: React.FC = () => {
             />
             <TextField
               label="Manzil"
-              value={newMember.address}
+              value={newMember.location}
               onChange={(e) =>
-                setNewMember({ ...newMember, address: e.target.value })
+                setNewMember({ ...newMember, location: e.target.value })
               }
               fullWidth
             />

@@ -81,12 +81,12 @@ const MemberTable: React.FC<MemberTableProps> = ({
                 },
               }}
             >
+              <TableCell>{member.firstName}</TableCell>
               <TableCell>{member.lastName}</TableCell>
-              <TableCell>{member.name}</TableCell>
               <TableCell>{member.contact}</TableCell>
               <TableCell>{member.age}</TableCell>
-              <TableCell>{member.address}</TableCell>
-              <TableCell>{member.registrationDate}</TableCell>
+              <TableCell>{member.location}</TableCell>
+              <TableCell>{member.register}</TableCell>
 
               <TableCell>
                 <IconButton
