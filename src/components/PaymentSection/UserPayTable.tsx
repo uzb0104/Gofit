@@ -1,6 +1,3 @@
-
-
-// UserPayTable.tsx
 import React from "react";
 import { User } from "../../types/userpaytab";
 import {

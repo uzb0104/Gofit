@@ -21,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { supabase } from "../../types/types/supabase";
 
 interface Payment {
+  id: number;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -56,9 +57,8 @@ const PaymentList = () => {
       newPayment.phoneNumber &&
       parseFloat(newPayment.amount) > 0
     ) {
-      // Insert payment to Supabase
       const { data, error } = await supabase
-        .from("payment") // Table name is 'payments'
+        .from("Payments")
         .insert([
           {
             first_name: newPayment.firstName,
@@ -71,7 +71,7 @@ const PaymentList = () => {
 
       if (error) {
         console.error(error);
-        alert("Xatolik yuz berdi!");
+        alert("Xatolik yuz berdi!!");
       } else {
         setPaymentData((prevData) => [
           ...prevData,
@@ -98,7 +98,7 @@ const PaymentList = () => {
 
   const fetchPayments = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("payment").select("*");
+    const { data, error } = await supabase.from("Payments").select("*");
 
     if (error) {
       console.error(error);

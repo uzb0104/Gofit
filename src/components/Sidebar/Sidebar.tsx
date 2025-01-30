@@ -21,7 +21,7 @@ const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Bosh sahifa", icon: <MenuIcon />, link: "/home" },
+    { name: "Bosh sahifa", icon: <MenuIcon />, link: "/home", path: "/" },
     { name: "Foydalanuvchilar", icon: <GroupIcon />, link: "/members" },
     { name: "Davomat", icon: <CheckCircleIcon />, link: "/attendance" },
     { name: "To'lovlar", icon: <PaymentIcon />, link: "/payment" },

@@ -134,7 +134,7 @@ const Members: React.FC = () => {
             height: 40,
             width: 150,
             marginBottom: "20px",
-            ml: 152,
+            ml: 127,
           }}
         >
           A'zo qo'shish
@@ -258,7 +258,9 @@ const Members: React.FC = () => {
           Ishonch hosil qildingizmi?
         </DialogTitle>
         <DialogContent sx={{ textAlign: "center", paddingBottom: "16px" }}>
-          <Typography>Ushbu a'zo o'chirilishini xohlaysizmi?</Typography>
+          <Typography>
+            Ushbu foydalanuvchini o'chirilishini xohlaysizmi?
+          </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", paddingBottom: "16px" }}>
           <Button
@@ -275,10 +277,13 @@ const Members: React.FC = () => {
           </Button>
           <Button
             onClick={handleDelete}
-            color="secondary"
             variant="contained"
             autoFocus
-            sx={{ borderRadius: "20px", textTransform: "capitalize" }}
+            sx={{
+              borderRadius: "20px",
+              textTransform: "capitalize",
+              bgcolor: "#3516c0",
+            }}
           >
             Ha
           </Button>

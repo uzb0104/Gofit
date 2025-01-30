@@ -168,7 +168,7 @@ const AttendanceTable = () => {
   ];
 
   return (
-    <Container sx={{ mt: 3, height: "calc(100vh - 100px)" }}>
+    <Container sx={{ mt: 3, height: "calc(100vh - 120px)" }}>
       <Typography
         variant="h4"
         align="center"
