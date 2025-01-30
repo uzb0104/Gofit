@@ -70,9 +70,10 @@ const PaymentList = () => {
         .select();
 
       if (error) {
-        console.error(error);
-        alert("Xatolik yuz berdi!!");
+        console.error("Supabase Xatosi:", error);
+        alert("Xatolik yuz berdi: " + error.message);
       } else {
+        console.log("Yangi to'lov qo'shildi:", data);
         setPaymentData((prevData) => [
           ...prevData,
           {
@@ -104,7 +105,15 @@ const PaymentList = () => {
       console.error(error);
       alert("Xatolik yuz berdi!");
     } else {
-      setPaymentData(data || []);
+      const formattedData = data.map((item) => ({
+        id: item.id,
+        firstName: item.first_name,
+        lastName: item.last_name,
+        phoneNumber: item.phone_number,
+        amount: item.amount,
+      }));
+
+      setPaymentData(formattedData);
     }
 
     setLoading(false);
