@@ -173,6 +173,7 @@ const PaymentList = () => {
             <TableBody>
               {paymentData.map((payment) => (
                 <TableRow
+                  key={payment.id}
                   sx={{
                     "&:hover": {
                       bgcolor: "#2e2e2e1a",
@@ -204,10 +205,12 @@ const PaymentList = () => {
             <TextField
               label="Ism"
               value={newPayment.firstName}
+              autoFocus
               onChange={(e) =>
                 setNewPayment({ ...newPayment, firstName: e.target.value })
               }
             />
+
             <TextField
               label="Familiya"
               value={newPayment.lastName}
