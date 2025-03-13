@@ -128,13 +128,18 @@ const PaymentList = () => {
       <Typography
         variant="h4"
         fontWeight={"bold"}
-        sx={{ color: "#3516c0", alignItems: "center" }}
+        sx={{ color: "#3516c0", textAlign: "center" }}
       >
         Foydalanuvchilarning To'lovlari
       </Typography>
 
       <Box
-        sx={{ display: "flex", justifyContent: "flex-end", marginBottom: 2 }}
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 2,
+          marginTop: 4,
+        }}
       >
         <Button
           variant="contained"
@@ -229,9 +234,12 @@ const PaymentList = () => {
               label="To'langan summa (UZS)"
               type="number"
               value={newPayment.amount}
-              onChange={(e) =>
-                setNewPayment({ ...newPayment, amount: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d*\.?\d*$/.test(value)) {
+                  setNewPayment({ ...newPayment, amount: value });
+                }
+              }}
             />
           </Stack>
         </DialogContent>
